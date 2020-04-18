@@ -19,7 +19,7 @@ app.use(cors());
 app.use(express.json());
 
 // Ручки для агентов
-app.post('/notify-agent', notifyAgent);
+app.post('/notify-agent', notifyAgent); // регистрация агента, в параметрах хост и порт, на котором запущен агент
 app.post('/notify-build-result', notifyBuildResult);
 
 app.listen(port, () => {

@@ -4,12 +4,14 @@ function notifyAgent(req, res) {
       res.status(400).send('Host and port are required.');
       return;
     }
+    console.log('agent registered on', agentHost, ':', agentPort);
+    res.status(200).send('OK');
   }
   // Регистрируем агента на сервере
-  const { host, port } = req.body;
+  // const { host } = req.headers;
+  const { port, host } = req.body;
 
   registerAgent(host, port);
-  console.log('agent registered on', host, port);
 }
 
 function notifyBuildResult(req, res) {
