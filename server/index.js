@@ -5,19 +5,7 @@ const cors = require('cors');
 
 const { port, apiBaseUrl, apiToken } = require('./server-conf.json');
 
-// const { notifyAgent, notifyBuildResult } = require('./routes/agent');
-const notifyAgent = (req, res) => {
-  res.status(200);
-  res.send('OK');
-
-  console.log('/notify-agent triggered');
-};
-const notifyBuildResult = (req, res) => {
-  res.status(200);
-  res.send('OK');
-
-  console.log('/notify-build-result triggered');
-};
+const { notifyAgent, notifyBuildResult } = require('./routes/agent');
 
 axios.defaults.baseURL = apiBaseUrl;
 axios.defaults.headers.common.Authorization = `Bearer ${apiToken}`;
