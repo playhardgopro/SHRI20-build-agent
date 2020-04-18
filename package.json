@@ -1,0 +1,27 @@
+{
+  "name": "dz-infra",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/playhardgopro/dz-infra.git"
+  },
+  "author": "Daniel Egortsev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/playhardgopro/dz-infra/issues"
+  },
+  "homepage": "https://github.com/playhardgopro/dz-infra#readme",
+  "devDependencies": {
+    "eslint": "^6.8.0"
+  },
+  "dependencies": {
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1"
+  }
+}
