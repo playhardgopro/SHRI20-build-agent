@@ -1,0 +1,5 @@
+{
+  "port": 12345,
+  "apiBaseUrl": "https://hw.shri.yandex/api/",
+  "apiToken": "asdfgh"
+}
