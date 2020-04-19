@@ -3,7 +3,7 @@ const axios = require('axios');
 const https = require('https');
 const cors = require('cors');
 
-const { port, apiBaseUrl, apiToken } = require('./server-conf.json');
+const { port, apiBaseUrl, apiToken } = require('./env');
 
 const { notifyAgent, notifyBuildResult } = require('./routes/agent');
 

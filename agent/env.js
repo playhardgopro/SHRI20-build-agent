@@ -1,9 +1,10 @@
 const path = require('path');
 const dotenv = require('dotenv');
+const os = require('os');
 dotenv.config();
-const { port, host, serverHost, serverPort } = require('./agent-conf.json');
+const { port, serverHost, serverPort } = require('./agent-conf.json');
 
-const envHost = process.env.HOST || host;
+const envHost = process.env.HOST || os.networkInterfaces().lo[0].address;
 
 const envPort = process.env.PORT || port;
 
