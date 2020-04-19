@@ -1,17 +1,35 @@
+const { db } = require('../db');
+
 function notifyAgent(req, res) {
-  function registerAgent(agentHost, agentPort) {
+  /**
+   * Функция, которая проверяет наличие хоста и/или порта агента
+   * @param {String} agentHost хост агента
+   * @param {String} agentPort порт агента
+   */
+  function agentHostAndPortValidation(agentHost, agentPort) {
     if (!agentHost || !agentPort) {
       res.status(400).send('Host and port are required.');
       return;
     }
-    console.log('agent registered on', agentHost, ':', agentPort);
-    res.status(200).send('OK');
   }
-  // Регистрируем агента на сервере
-  // const { host } = req.headers;
-  const { port, host } = req.body;
 
-  registerAgent(host, port);
+  const { host, port } = req.body;
+
+  agentHostAndPortValidation(host, port);
+
+  const agents = db.get('agents').value();
+
+  if (agents.some((agent) => agent.host === host && agent.port === port)) {
+    console.info(`Agent on http://${host}:${port} is already registered`);
+    res.status(200).send('Agent is already registered');
+    return;
+  }
+
+  agents.push({ host, port });
+  db.write();
+
+  console.info(`Agent registered on http://${host}:${port}`);
+  res.status(204).end();
 }
 
 function notifyBuildResult(req, res) {
