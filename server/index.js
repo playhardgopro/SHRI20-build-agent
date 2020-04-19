@@ -5,7 +5,10 @@ const cors = require('cors');
 
 const { port, apiBaseUrl, apiToken } = require('./env');
 
-const { notifyAgentHandler, notifyBuildResult } = require('./routes/agent');
+const {
+  notifyAgentHandler,
+  notifyBuildResultHandler,
+} = require('./routes/agent');
 
 axios.defaults.baseURL = apiBaseUrl;
 axios.defaults.headers.common.Authorization = `Bearer ${apiToken}`;
@@ -20,7 +23,7 @@ app.use(express.json());
 
 // Ручки для агентов
 app.post('/notify-agent', notifyAgentHandler); // регистрация агента, в параметрах хост и порт, на котором запущен агент
-app.post('/notify-build-result', notifyBuildResult);
+app.post('/notify-build-result', notifyBuildResultHandler);
 
 app.listen(port, () => {
   console.info(`Server listening on http://localhost:${port}/`);

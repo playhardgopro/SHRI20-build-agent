@@ -35,16 +35,42 @@ function notifyAgentHandler(req, res) {
   console.info(`Agent registered on http://${host}:${port}`);
   res.status(204).end();
 }
-
-function notifyBuildResult(req, res) {
-  console.log(req.body);
-  res.status(200);
-  res.send('OK');
-
+function notifyBuildResultHandler(req, res) {
   console.log('/notify-build-result triggered');
+  // — сохранить результаты сборки. В параметрах — id сборки, статус, лог (stdout и stderr процесса).
+  const { id, status, stdout, stderr } = req.body;
+  if (!id || !status) {
+    res.status(400).send('Id and status are required');
+    return;
+  }
+
+  const task = db.get('tasks').find({ id }).value();
+  if (!task) {
+    res.status(404).send(`No task with id: ${id}`);
+    return;
+  }
+
+  Object.assign(task, {
+    id,
+    status,
+    stdout,
+    stderr,
+    finished: new Date().toISOString(),
+  });
+
+  const agent = db
+    .get('agents')
+    .find((agent) => agent.taskId === id)
+    .value();
+  if (agent) {
+    agent.taskId = null;
+  }
+  db.write();
+
+  res.status(204).end();
 }
 
 module.exports = {
   notifyAgentHandler,
-  notifyBuildResult,
+  notifyBuildResultHandler,
 };

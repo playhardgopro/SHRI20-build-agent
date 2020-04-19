@@ -11,8 +11,7 @@ function errorHandler(error) {
       '============================================================'
     );
     console.warn(error.response.status);
-    console.log(error.response.data.title);
-    console.error(error.response.data.errors);
+    console.log(error.response.data);
     console.error(
       '============================================================'
     );
@@ -52,17 +51,19 @@ function errorHandler(error) {
  */
 async function notifyBuildResult(result) {
   console.log(result, 'result');
+  const options = {
+    url: `http://${serverHost}:${serverPort}/notify-build-result`,
+    method: 'post',
+    data: {
+      id: result.id,
+      status: result.code ? 'failed' : 'success',
+      stdout: result.stdout,
+      stderr: result.stderr,
+    },
+  };
   try {
-    await axios({
-      url: `${serverHost}:${serverPort}/notify-build-result`,
-      method: 'post',
-      data: {
-        id: result.id,
-        status: result.code ? 'failed' : 'success',
-        stdout: result.stdout,
-        stderr: result.stderr,
-      },
-    });
+    await axios(options);
+    console.log(options, 'options');
 
     console.info(`Successfully notified server, task id is ${result.id}`);
   } catch (e) {

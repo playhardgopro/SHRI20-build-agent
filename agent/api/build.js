@@ -2,6 +2,7 @@ const { notifyBuildResult } = require('./helpers');
 const { cloneRepo, runBuild } = require('../utils');
 const { buildsDir } = require('../env');
 const path = require('path');
+const { rmdir } = require('fs').promises;
 
 /**
  * Асинхронная функция, которая проверяет необходимые поля в request,
@@ -48,6 +49,7 @@ async function postBuildHandler(req, res, next) {
       buildCommand
     );
     notifyBuildResult({ ...buildResult, id });
+    await rmdir(path.resolve(buildsDir, dirNameForEveryBuild));
   } catch (e) {
     next(e);
   }
