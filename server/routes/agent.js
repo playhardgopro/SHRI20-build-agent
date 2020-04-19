@@ -1,6 +1,10 @@
 const { db } = require('../db');
-
-function notifyAgent(req, res) {
+/**
+ *  Функция, которая проверяет зарегистрирован ли агент в базе, если нет - то регистрирует
+ * @param {{body:{host:string, port:string}}} req
+ * @param {Object} res
+ */
+function notifyAgentHandler(req, res) {
   /**
    * Функция, которая проверяет наличие хоста и/или порта агента
    * @param {String} agentHost хост агента
@@ -8,7 +12,7 @@ function notifyAgent(req, res) {
    */
   function agentHostAndPortValidation(agentHost, agentPort) {
     if (!agentHost || !agentPort) {
-      res.status(400).send('Host and port are required.');
+      res.status(400).send('Host and port are required');
       return;
     }
   }
@@ -41,6 +45,6 @@ function notifyBuildResult(req, res) {
 }
 
 module.exports = {
-  notifyAgent,
+  notifyAgentHandler,
   notifyBuildResult,
 };

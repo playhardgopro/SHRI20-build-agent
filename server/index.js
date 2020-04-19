@@ -5,7 +5,7 @@ const cors = require('cors');
 
 const { port, apiBaseUrl, apiToken } = require('./env');
 
-const { notifyAgent, notifyBuildResult } = require('./routes/agent');
+const { notifyAgentHandler, notifyBuildResult } = require('./routes/agent');
 
 axios.defaults.baseURL = apiBaseUrl;
 axios.defaults.headers.common.Authorization = `Bearer ${apiToken}`;
@@ -19,7 +19,7 @@ app.use(cors());
 app.use(express.json());
 
 // Ручки для агентов
-app.post('/notify-agent', notifyAgent); // регистрация агента, в параметрах хост и порт, на котором запущен агент
+app.post('/notify-agent', notifyAgentHandler); // регистрация агента, в параметрах хост и порт, на котором запущен агент
 app.post('/notify-build-result', notifyBuildResult);
 
 app.listen(port, () => {
