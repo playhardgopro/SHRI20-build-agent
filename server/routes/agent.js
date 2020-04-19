@@ -15,6 +15,7 @@ function notifyAgent(req, res) {
 }
 
 function notifyBuildResult(req, res) {
+  console.log(req.body);
   res.status(200);
   res.send('OK');
 
