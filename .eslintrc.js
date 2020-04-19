@@ -4,7 +4,13 @@ module.exports = {
     es6: true,
     node: true,
   },
-  extends: 'eslint:recommended',
+  extends: [
+    'eslint:recommended',
+    'plugin:node/recommended',
+    'plugin:import/errors',
+    'plugin:import/warnings',
+    'plugin:promise/recommended',
+  ],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',

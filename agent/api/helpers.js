@@ -95,6 +95,7 @@ async function registerAgentOnServer(serverHost, serverPort) {
   } catch (e) {
     console.error('Error registering on the server');
     errorHandler(e);
+    // eslint-disable-next-line no-process-exit
     process.exit(1);
   }
 }
