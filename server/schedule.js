@@ -75,7 +75,7 @@ async function drainQueue() {
 async function pingAgent(agent) {
   try {
     const res = await axios(`http://${agent.host}:${agent.port}/ping`);
-    return res.ok;
+    return res.status == 204;
   } catch (e) {
     return false;
   }
@@ -110,14 +110,9 @@ async function getTasksFromServer() {
   const response = await axios.get(`${apiBaseUrl}/build/list`);
   const { data } = response.data;
   const waitingTasks = await data.filter((el) => el.status === 'Waiting');
-  // const isInLocalDB = data.some((taskFromServer) =>
-  //   queue.find((localTask) => taskFromServer.id == localTask.id)
-  // );
-  // if (!isInLocalDB) {
+
   db.set('tasks', data).write();
   db.set('queue', waitingTasks).write();
-  // }
-  // console.log(tasks, 'tasks');
 }
 
 setInterval(getTasksFromServer, 10000);
