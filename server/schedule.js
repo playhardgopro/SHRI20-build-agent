@@ -24,9 +24,6 @@ async function runTaskOnAgent(task, agent) {
       buildId: id,
       dateTime: new Date().toISOString(),
     })
-    .then((resolve) =>
-      console.log(resolve.status, 'start task', id, new Date().toISOString())
-    )
     .catch((e) => console.log(e, 'startTask err'));
 }
 
@@ -45,7 +42,6 @@ function removeBrokenAgent(agent) {
 async function drainQueue() {
   const queue = db.get('queue').value();
   const agents = db.get('agents').value();
-  const tasks = db.get('tasks').value();
 
   if (!queue.length) return;
   if (!agents.length) return;
@@ -54,11 +50,6 @@ async function drainQueue() {
   if (!agent) return;
 
   const task = queue.shift();
-  // agent.taskId = task.id;
-  // task.status = 'starting';
-  // tasks.push(task);
-
-  // db.write();
 
   try {
     await runTaskOnAgent(task, agent);
