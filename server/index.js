@@ -2,6 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const https = require('https');
 const cors = require('cors');
+const { db } = require('./db');
 
 const { port, apiBaseUrl, apiToken } = require('./env');
 
@@ -27,4 +28,18 @@ app.post('/notify-build-result', notifyBuildResultHandler);
 
 app.listen(port, () => {
   console.info(`Server listening on http://localhost:${port}/`);
+
+  // NOTE: забираем настройки и кладем в базу данных
+  axios
+    .get(`${apiBaseUrl}/conf`)
+    .then((response) => {
+      if (response.data && response.status < 205) {
+        db.set('settings', response.data.data).write();
+      }
+      return;
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+  require('./schedule');
 });

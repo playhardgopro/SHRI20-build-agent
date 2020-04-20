@@ -17,6 +17,8 @@ app.use(express.json());
 
 app.post('/build', postBuildHandler);
 
+app.get('/ping', (req, res) => res.status('204').end());
+
 app.listen(port, host, () => {
   // console.log(app);
   console.info(`Agent is listening on http://${host}:${port}/`);

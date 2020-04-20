@@ -50,15 +50,15 @@ function errorHandler(error) {
  * @returns {Promise}
  */
 async function notifyBuildResult(result) {
-  console.log(result, 'result');
   const options = {
     url: `http://${serverHost}:${serverPort}/notify-build-result`,
     method: 'post',
     data: {
       id: result.id,
-      status: result.code ? 'failed' : 'success',
+      success: !result.code,
       stdout: result.stdout,
       stderr: result.stderr,
+      startTime: result.startTime,
     },
   };
   try {

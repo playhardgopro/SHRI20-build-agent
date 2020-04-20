@@ -49,7 +49,6 @@ async function postBuildHandler(req, res, next) {
       buildCommand
     );
     notifyBuildResult({ ...buildResult, id });
-    await rmdir(path.resolve(buildsDir, dirNameForEveryBuild));
   } catch (e) {
     next(e);
   }

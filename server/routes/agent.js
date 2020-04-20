@@ -1,4 +1,7 @@
 const { db } = require('../db');
+const axios = require('axios');
+const { apiBaseUrl } = require('../env');
+const { errorHandler } = require('../helpers');
 /**
  *  Функция, которая проверяет зарегистрирован ли агент в базе, если нет - то регистрирует
  * @param {{body:{host:string, port:string}}} req
@@ -35,15 +38,25 @@ function notifyAgentHandler(req, res) {
   console.info(`Agent registered on http://${host}:${port}`);
   res.status(204).end();
 }
+
+
 function notifyBuildResultHandler(req, res) {
   console.log('/notify-build-result triggered');
   // — сохранить результаты сборки. В параметрах — id сборки, статус, лог (stdout и stderr процесса).
-  const { id, status, stdout, stderr } = req.body;
-  if (!id || !status) {
-    res.status(400).send('Id and status are required');
+  const { id, success, stdout, stderr, startTime } = req.body;
+  if (!id) {
+    res.status(400).send('Id is required');
     return;
   }
 
+  axios
+    .post(`${apiBaseUrl}/build/finish`, {
+      buildId: id,
+      duration: Date.now() - new Date(startTime),
+      success,
+      buildLog: '' + stdout + stderr,
+    })
+    .catch((e) => errorHandler(e));
   const task = db.get('tasks').find({ id }).value();
   if (!task) {
     res.status(404).send(`No task with id: ${id}`);
@@ -52,10 +65,9 @@ function notifyBuildResultHandler(req, res) {
 
   Object.assign(task, {
     id,
-    status,
+    success,
     stdout,
     stderr,
-    finished: new Date().toISOString(),
   });
 
   const agent = db

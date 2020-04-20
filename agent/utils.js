@@ -1,7 +1,5 @@
 const { exec } = require('child_process');
 const { promisify } = require('util');
-// const { mkdir } = require('fs').promises;
-
 const execAsync = promisify(exec);
 
 async function cloneRepo(buildsDir, repoName, commitHash, directory) {
@@ -10,7 +8,10 @@ async function cloneRepo(buildsDir, repoName, commitHash, directory) {
   // await mkdir(buildsDir);
 
   const CLONE_COMMAND = `git clone https://github.com/${repoName}.git ${directory} && cd ${directory} && git reset --hard ${commitHash}`;
-  const options = { cwd: buildsDir, env: { GIT_TERMINAL_PROMPT: '0' } };
+  const options = {
+    cwd: buildsDir,
+    env: { GIT_TERMINAL_PROMPT: '0' },
+  };
   console.log('clone', CLONE_COMMAND);
   try {
     const { stdout, stderr } = await execAsync(CLONE_COMMAND, options);
@@ -25,12 +26,20 @@ async function cloneRepo(buildsDir, repoName, commitHash, directory) {
 }
 
 async function runBuild(buildDirectory, buildCommand) {
+  const startTime = new Date().toISOString();
   const options = { cwd: buildDirectory };
   try {
     const { stdout, stderr } = await execAsync(buildCommand, options);
-    return { code: 0, stdout, stderr };
+    return { code: 0, stdout, stderr, startTime };
   } catch (e) {
-    return { code: e.code, stdout: e.stdout, stderr: e.stderr };
+    return {
+      code: e.code,
+      stdout: e.stdout,
+      stderr: e.stderr,
+      startTime: e.startTime,
+    };
+  } finally {
+    await execAsync(`rm -rf ${buildDirectory}`, options);
   }
 }
 
