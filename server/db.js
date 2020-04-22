@@ -10,7 +10,6 @@ db.defaults({
   agents: [],
   tasks: [],
   queue: [],
-  nextTaskId: 1,
 }).write();
 
 module.exports = { db };

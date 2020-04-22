@@ -15,7 +15,7 @@ async function cloneRepo(buildsDir, repoName, commitHash, directory) {
   const startTime = new Date().toISOString();
   const options = {
     cwd: buildsDir,
-    env: { GIT_TERMINAL_PROMPT: '0' },
+    env: { GIT_TERMINAL_PROMPT: '0', FORCE_COLOR: true },
   };
   console.log('clone', CLONE_COMMAND);
   try {
@@ -39,7 +39,7 @@ async function cloneRepo(buildsDir, repoName, commitHash, directory) {
  */
 async function runBuild(buildDirectory, buildCommand) {
   const startTime = new Date().toISOString();
-  const options = { cwd: buildDirectory };
+  const options = { cwd: buildDirectory, env: { FORCE_COLOR: true } };
   try {
     const { stdout, stderr } = await execAsync(buildCommand, options);
     return { code: 0, stdout, stderr, startTime };
