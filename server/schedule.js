@@ -1,6 +1,7 @@
 const axios = require('axios');
 const { apiBaseUrl } = require('./env');
 const { db } = require('./db');
+const { errorHandler } = require('./helpers');
 
 const CHECK_TIME = 10000;
 
@@ -17,14 +18,14 @@ async function runTaskOnAgent(task, agent) {
       repoName,
       buildCommand,
     })
-    .catch((e) => console.log(e, 'sendTask err'));
+    .catch((e) => errorHandler(e));
 
   const startTask = axios
     .post(`${apiBaseUrl}/build/start`, {
       buildId: id,
       dateTime: new Date().toISOString(),
     })
-    .catch((e) => console.log(e, 'startTask err'));
+    .catch((e) => errorHandler(e));
 }
 
 function removeBrokenAgent(agent) {

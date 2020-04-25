@@ -3,6 +3,7 @@ const axios = require('axios');
 const https = require('https');
 const cors = require('cors');
 const { db } = require('./db');
+const { errorHandler } = require('./helpers');
 
 const { port, apiBaseUrl, apiToken } = require('./env');
 
@@ -38,8 +39,7 @@ app.listen(port, () => {
       }
       return;
     })
-    .catch((e) => {
-      console.log(e);
-    });
+    .catch((e) => errorHandler(e));
+
   require('./schedule');
 });

@@ -8,7 +8,7 @@ const execAsync = promisify(exec);
  * @param {string} commitHash
  * @param {string} directory - путь до папки конкретного билда с уникальным ID
  *
- * @returns {{code:number, stdout: string, stderr: string, startTime: string}}
+ * @returns {Promise<{code:number, stdout: string, stderr: string, startTime: string}>}
  */
 async function cloneRepo(buildsDir, repoName, commitHash, directory) {
   const CLONE_COMMAND = `git clone https://github.com/${repoName}.git ${directory} && cd ${directory} && git reset --hard ${commitHash}`;
@@ -35,10 +35,11 @@ async function cloneRepo(buildsDir, repoName, commitHash, directory) {
  * @param {String} buildDirectory
  * @param {String} buildCommand
  *
- * @returns {{code:number, stdout: string, stderr: string, startTime: string}}
+ * @returns {Promise<{code:number, stdout: string, stderr: string, startTime: string}>}
  */
 async function runBuild(buildDirectory, buildCommand) {
   const startTime = new Date().toISOString();
+  console.log(startTime, 'start time');
   const options = { cwd: buildDirectory, env: { FORCE_COLOR: true } };
   try {
     const { stdout, stderr } = await execAsync(buildCommand, options);
