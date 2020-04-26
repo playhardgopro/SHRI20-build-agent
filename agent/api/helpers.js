@@ -56,8 +56,7 @@ async function notifyBuildResult(result) {
     data: {
       id: result.id,
       success: !result.code,
-      stdout: result.stdout,
-      stderr: result.stderr,
+      log: result.log,
       startTime: result.startTime,
     },
   };

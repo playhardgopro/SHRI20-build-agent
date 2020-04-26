@@ -42,7 +42,7 @@ function notifyAgentHandler(req, res) {
 function notifyBuildResultHandler(req, res) {
   console.log('/notify-build-result triggered');
   // — сохранить результаты сборки. В параметрах — id сборки, статус, лог (stdout и stderr процесса).
-  const { id, success, stdout, stderr, startTime } = req.body;
+  const { id, success, log, startTime } = req.body;
   if (!id) {
     res.status(400).send('Id is required');
     return;
@@ -59,15 +59,14 @@ function notifyBuildResultHandler(req, res) {
       buildId: id,
       duration: Date.now() - new Date(startTime),
       success,
-      buildLog: '' + stdout + stderr,
+      buildLog: log,
     })
     .catch((e) => errorHandler(e));
 
   Object.assign(task, {
     id,
     success,
-    stdout,
-    stderr,
+    log,
   });
 
   const agent = db
