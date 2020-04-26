@@ -46,7 +46,7 @@ function errorHandler(error) {
 }
 /**
  * Асинхронная функция, которая отдает серверу результаты билда
- * @param {{code: number, stdout: string, stderr: string, id: number}} result
+ * @param {{code: number, stdout: string, stderr: string, id: number, startTime: string}} result
  * @returns {Promise}
  */
 async function notifyBuildResult(result) {

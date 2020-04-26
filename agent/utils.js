@@ -12,7 +12,10 @@ const execAsync = promisify(exec);
  */
 async function cloneRepo(buildsDir, repoName, commitHash, directory) {
   const CLONE_COMMAND = `git clone https://github.com/${repoName}.git ${directory} && cd ${directory} && git reset --hard ${commitHash}`;
+
   const startTime = new Date().toISOString();
+  console.log(startTime, 'start time => git clone');
+
   const options = {
     cwd: buildsDir,
     env: { GIT_TERMINAL_PROMPT: '0', FORCE_COLOR: true },
@@ -26,7 +29,7 @@ async function cloneRepo(buildsDir, repoName, commitHash, directory) {
       code: e.code,
       stdout: e.stdout,
       stderr: e.stderr ? e.stderr : e.toString(),
-      startTime: e.startTime,
+      startTime: startTime,
     };
   }
 }
@@ -38,9 +41,11 @@ async function cloneRepo(buildsDir, repoName, commitHash, directory) {
  * @returns {Promise<{code:number, stdout: string, stderr: string, startTime: string}>}
  */
 async function runBuild(buildDirectory, buildCommand) {
-  const startTime = new Date().toISOString();
-  console.log(startTime, 'start time');
   const options = { cwd: buildDirectory, env: { FORCE_COLOR: true } };
+
+  const startTime = new Date().toISOString();
+  console.log(startTime, 'start time => run build');
+
   try {
     const { stdout, stderr } = await execAsync(buildCommand, options);
     return { code: 0, stdout, stderr, startTime };
@@ -49,7 +54,7 @@ async function runBuild(buildDirectory, buildCommand) {
       code: e.code,
       stdout: e.stdout,
       stderr: e.stderr,
-      startTime: e.startTime,
+      startTime: startTime,
     };
   } finally {
     await execAsync(`rm -rf ${buildDirectory}`, options);

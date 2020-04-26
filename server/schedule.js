@@ -20,12 +20,20 @@ async function runTaskOnAgent(task, agent) {
     })
     .catch((e) => errorHandler(e));
 
+  if ((await sendTask.status) === 500) {
+    sendTask();
+  }
+
   const startTask = axios
     .post(`${apiBaseUrl}/build/start`, {
       buildId: id,
       dateTime: new Date().toISOString(),
     })
     .catch((e) => errorHandler(e));
+
+  if ((await startTask.status) === 500) {
+    startTask();
+  }
 }
 
 function removeBrokenAgent(agent) {
@@ -102,6 +110,8 @@ async function checkAgents() {
         removeBrokenAgent(agent);
       }
     }
+  } catch (e) {
+    errorHandler(e);
   } finally {
     setTimeout(checkAgents, CHECK_TIME);
   }
